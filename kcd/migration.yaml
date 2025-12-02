@@ -1,0 +1,6 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachineInstanceMigration
+metadata:
+  name: migrate-fedora-replica
+spec:
+  vmiName: fedora-vm-rs4b76v

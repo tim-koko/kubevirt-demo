@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-content-cm
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <h1>Hello KCD!</h1>
+      </body>
+    </html>
