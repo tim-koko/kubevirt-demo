@@ -18,9 +18,9 @@ kubectl apply -f kubevirt-demo/kcd/fedora-vm/vm.yaml --namespace=kcd-demo
 
 ## Demo
 
+* go through the vm artefact
 * go through the secret artefact
 * show the custom config map
-* go through the vm artefact
 * start the vm
 
 ```sh
@@ -68,6 +68,13 @@ Terminal 2
 virtctl migrate fedora-vm --namespace=kcd-demo
 kubectl get vmi -w --namespace=kcd-demo
 ```
+
+## Gitops with argo CD
+
+* Open Argo CD showing the vmirs
+* Change the amount of replicas from 1 to 3
+* commit and push the changes
+* show how simple it is to manage VMs using gitops
 
 ## Backup
 

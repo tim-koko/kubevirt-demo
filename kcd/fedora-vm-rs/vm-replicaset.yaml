@@ -3,7 +3,7 @@ kind: VirtualMachineInstanceReplicaSet
 metadata:
   name: fedora-vm-rs
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       kubevirt.io/domain: fedora-vm-rs
