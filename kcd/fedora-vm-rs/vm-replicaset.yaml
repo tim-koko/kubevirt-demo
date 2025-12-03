@@ -3,7 +3,7 @@ kind: VirtualMachineInstanceReplicaSet
 metadata:
   name: fedora-vm-rs
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       kubevirt.io/domain: fedora-vm-rs
@@ -39,6 +39,7 @@ spec:
           port: 8080
         timeoutSeconds: 10
       readinessProbe:
+        initialDelaySeconds: 0
         periodSeconds: 2
         timeoutSeconds: 5
         httpGet:
