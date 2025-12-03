@@ -11,51 +11,42 @@ export USER=kcd-demo
 1. Create the artefacts before the presentation and only start and observe them
 
 ```sh
-kubectl create secret generic fedora-vm --from-file=userdata=kubevirt-demo/kcd/cloudinit-userdata.yaml --namespace=$USER
-kubectl apply -f kubevirt-demo/kcd/svc-ingress.yaml --namespace=$USER
-kubectl apply -f kubevirt-demo/kcd/vm.yaml --namespace=$USER
-kubectl apply -f kubevirt-demo/kcd/vm-replicaset.yaml --namespace=$USER
-```
-
-1. Create backup ns where everything is running already
-
-```sh
-kubectl create ns kubevirt-demo-backup
-kubectl create secret generic fedora-vm-2 --from-file=userdata=kubevirt-demo/cloud-native-meetup/backup/cloudinit-userdata.yaml --namespace=kubevirt-demo-backup
-kubectl apply -f kubevirt-demo/kcd/backup/svc-ingress.yaml --namespace=kubevirt-demo-backup
-kubectl apply -f kubevirt-demo/kcd/backup/vm.yaml --namespace=kubevirt-demo-backup
+kubectl apply -f kubevirt-demo/kcd/fedora-vm/cloudinit-userdata-secret.yaml --namespace=kcd-demo
+kubectl apply -f kubevirt-demo/kcd/fedora-vm/svc-ingress.yaml --namespace=kcd-demo
+kubectl apply -f kubevirt-demo/kcd/fedora-vm/vm.yaml --namespace=kcd-demo
 ```
 
 ## Demo
 
 * go through the secret artefact
+* show the custom config map
 * go through the vm artefact
 * start the vm
 
 ```sh
-virtctl start fedora-vm --namespace=$USER
+virtctl start fedora-vm --namespace=kcd-demo
 ```
 
 * show the starting vm
 
 ```sh
-kubectl get vm --namespace=$USER
+kubectl get vm --namespace=kcd-demo
 ```
 
 ```sh
-kubectl get vmi --namespace=$USER
+kubectl get vmi --namespace=kcd-demo
 ```
 
 * And the pod
 
 ```sh
-kubectl get pod --namespace=$USER
+kubectl get pod --namespace=kcd-demo
 ```
 
 * connect to the console and log in
 
 ```sh
-virtctl console fedora-vm --namespace=$USER
+virtctl console fedora-vm --namespace=kcd-demo
 ```
 
 * Login: fedora, kubevirt
@@ -68,11 +59,11 @@ virtctl console fedora-vm --namespace=$USER
 Terminal 1
 
 ```sh
-while true; do sleep 1; echo -n `date +"[%H:%M:%S,%3N] "`; echo -n " "; curl --max-time 1 --connect-timeout 0.8 https://kcd.apps.lab.clusters.t-k.ch/; echo ""; done
+while true; do sleep 1; echo -n `date +"[%H:%M:%S,%3N] "`; echo -n " "; curl --max-time 1 --connect-timeout 0.8 https://kcd.apps.lab.clusters.t-k.ch/api; echo ""; done
 ```
 
 ```sh Backup
-while true; do sleep 1; echo -n `date +"[%H:%M:%S,%3N] "`; echo -n " "; curl --max-time 1 --connect-timeout 0.8 https://kcd-rs.apps.lab.clusters.t-k.ch/; echo ""; done
+while true; do sleep 1; echo -n `date +"[%H:%M:%S,%3N] "`; echo -n " "; curl --max-time 1 --connect-timeout 0.8 https://kcd-rs.apps.lab.clusters.t-k.ch/api; echo ""; done
 ```
 
 ```sh Backup
@@ -82,27 +73,22 @@ while true; do sleep 1; echo -n `date +"[%H:%M:%S,%3N] "`; echo -n " "; curl --m
 Terminal 2
 
 ```sh
-virtctl migrate vm --namespace=$USER
+virtctl migrate fedora-vm --namespace=$USER
 kubectl get vmi -w --namespace=$USER
 ```
 
 ```sh Backup
-virtctl migrate vm --namespace=kubevirt-demo-backup
+virtctl migrate fedora-vm-2 --namespace=kubevirt-demo-backup
 kubectl get vmi -w --namespace=kubevirt-demo-backup
 ```
 
-## reset
+## Backup
+
+. Create backup ns where everything is running already
 
 ```sh
-
-kubectl delete secret fedora-vm  --namespace=$USER
-kubectl delete -f kubevirt-demo/cloud-native-meetup/vm.yaml --namespace=$USER
-kubectl delete -f kubevirt-demo/cloud-native-meetup/svc-ingress.yaml --namespace=$USER
-```
-
-```sh Backup
-
-kubectl delete secret fedora-vm-2  --namespace=kubevirt-demo-backup
-kubectl delete -f kubevirt-demo/cloud-native-meetup/backup/vm.yaml --namespace=kubevirt-demo-backup
-kubectl delete -f kubevirt-demo/cloud-native-meetup/backup/svc-ingress.yaml --namespace=kubevirt-demo-backup
-```
+kubectl create ns kcd-demo-backup
+kubectl apply -f kubevirt-demo/kcd/backup/cloudinit-userdata-secret.yaml --namespace=kcd-demo-backup
+kubectl apply -f kubevirt-demo/kcd/backup/svc-ingress.yaml --namespace=kcd-demo-backup
+kubectl apply -f kubevirt-demo/kcd/backup/vm.yaml --namespace=kcd-demo-backup
+kubectl apply -f kubevirt-demo/kcd/backup/vm-replicaset.yaml --namespace=kcd-demo-backup

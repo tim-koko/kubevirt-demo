@@ -1,0 +1,62 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachineInstanceReplicaSet
+metadata:
+  name: fedora-vm-rs
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      kubevirt.io/domain: fedora-vm-rs
+  template:
+    metadata:
+      labels:
+        kubevirt.io/domain: fedora-vm-rs
+    spec:
+      domain:
+        cpu:
+          cores: 1
+        devices:
+          disks:
+            - name: containerdisk
+              disk:
+                bus: virtio
+            - name: cloudinitdisk
+              disk:
+                bus: virtio
+            - name: html-content
+              disk:
+                bus: virtio
+          interfaces:
+          - name: default
+            masquerade: {}
+        resources:
+          requests:
+            memory: 2Gi
+      livenessProbe:
+        initialDelaySeconds: 120
+        periodSeconds: 20
+        httpGet:
+          port: 8080
+        timeoutSeconds: 10
+      readinessProbe:
+        initialDelaySeconds: 0
+        periodSeconds: 2
+        timeoutSeconds: 5
+        httpGet:
+          port: 8080
+        failureThreshold: 1
+        successThreshold: 1
+      networks:
+      - name: default
+        pod: {}
+      volumes:
+        - name: containerdisk
+          containerDisk:
+            image: quay.io/containerdisks/fedora:43
+        - name: cloudinitdisk
+          cloudInitNoCloud:
+            secretRef:
+              name: fedora-vm
+        - name: html-content
+          configMap:
+            name: web-content-cm
