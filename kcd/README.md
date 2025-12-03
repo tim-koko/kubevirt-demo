@@ -100,3 +100,12 @@ while true; do sleep 1; echo -n `date +"[%H:%M:%S,%3N] "`; echo -n " "; curl --m
 ```sh Backup
 while true; do sleep 1; echo -n `date +"[%H:%M:%S,%3N] "`; echo -n " "; curl --max-time 1 --connect-timeout 0.8 https://kcd-backup.apps.lab.clusters.t-k.ch/; echo ""; done
 ```
+
+## reset
+
+```sh
+virtctl stop fedora-vm --namespace=kcd-demo
+kubectl apply -f kubevirt-demo/kcd/fedora-vm/cloudinit-userdata-secret.yaml --namespace=kcd-demo
+kubectl apply -f kubevirt-demo/kcd/fedora-vm/svc-ingress.yaml --namespace=kcd-demo
+kubectl apply -f kubevirt-demo/kcd/fedora-vm/vm.yaml --namespace=kcd-demo
+```
