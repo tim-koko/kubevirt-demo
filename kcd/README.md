@@ -62,24 +62,11 @@ Terminal 1
 while true; do sleep 1; echo -n `date +"[%H:%M:%S,%3N] "`; echo -n " "; curl --max-time 1 --connect-timeout 0.8 https://kcd.apps.lab.clusters.t-k.ch/api; echo ""; done
 ```
 
-```sh Backup
-while true; do sleep 1; echo -n `date +"[%H:%M:%S,%3N] "`; echo -n " "; curl --max-time 1 --connect-timeout 0.8 https://kcd-rs.apps.lab.clusters.t-k.ch/api; echo ""; done
-```
-
-```sh Backup
-while true; do sleep 1; echo -n `date +"[%H:%M:%S,%3N] "`; echo -n " "; curl --max-time 1 --connect-timeout 0.8 https://kcd-backup.apps.lab.clusters.t-k.ch/; echo ""; done
-```
-
 Terminal 2
 
 ```sh
-virtctl migrate fedora-vm --namespace=$USER
-kubectl get vmi -w --namespace=$USER
-```
-
-```sh Backup
-virtctl migrate fedora-vm-2 --namespace=kubevirt-demo-backup
-kubectl get vmi -w --namespace=kubevirt-demo-backup
+virtctl migrate fedora-vm --namespace=kcd-demo
+kubectl get vmi -w --namespace=kcd-demo
 ```
 
 ## Backup
@@ -92,3 +79,17 @@ kubectl apply -f kubevirt-demo/kcd/backup/cloudinit-userdata-secret.yaml --names
 kubectl apply -f kubevirt-demo/kcd/backup/svc-ingress.yaml --namespace=kcd-demo-backup
 kubectl apply -f kubevirt-demo/kcd/backup/vm.yaml --namespace=kcd-demo-backup
 kubectl apply -f kubevirt-demo/kcd/backup/vm-replicaset.yaml --namespace=kcd-demo-backup
+```
+
+```sh Backup
+virtctl migrate fedora-vm-2 --namespace=kubevirt-demo-backup
+kubectl get vmi -w --namespace=kubevirt-demo-backup
+```
+
+```sh Backup
+while true; do sleep 1; echo -n `date +"[%H:%M:%S,%3N] "`; echo -n " "; curl --max-time 1 --connect-timeout 0.8 https://kcd-rs.apps.lab.clusters.t-k.ch/api; echo ""; done
+```
+
+```sh Backup
+while true; do sleep 1; echo -n `date +"[%H:%M:%S,%3N] "`; echo -n " "; curl --max-time 1 --connect-timeout 0.8 https://kcd-backup.apps.lab.clusters.t-k.ch/; echo ""; done
+```
