@@ -19,9 +19,9 @@ kubectl apply -f kubevirt-demo/kcd/fedora-vm/vm.yaml --namespace=kcd-demo
 ## Demo
 
 * go through the vm artefact
+* start the vm
 * go through the secret artefact
 * show the custom config map
-* start the vm
 
 ```sh
 virtctl start fedora-vm --namespace=kcd-demo
@@ -105,7 +105,7 @@ while true; do sleep 1; echo -n `date +"[%H:%M:%S,%3N] "`; echo -n " "; curl --m
 
 ```sh
 virtctl stop fedora-vm --namespace=kcd-demo
-kubectl apply -f kubevirt-demo/kcd/fedora-vm/cloudinit-userdata-secret.yaml --namespace=kcd-demo
-kubectl apply -f kubevirt-demo/kcd/fedora-vm/svc-ingress.yaml --namespace=kcd-demo
-kubectl apply -f kubevirt-demo/kcd/fedora-vm/vm.yaml --namespace=kcd-demo
+kubectl apply -f kcd/fedora-vm/cloudinit-userdata-secret.yaml --namespace=kcd-demo
+kubectl apply -f kcd/fedora-vm/svc-ingress.yaml --namespace=kcd-demo
+kubectl apply -f kcd/fedora-vm/vm.yaml --namespace=kcd-demo
 ```
